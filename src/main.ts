@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import getStarfield from './utils/getStarfield';
 
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
@@ -26,7 +27,6 @@ const loader = new THREE.TextureLoader();
 
 const earthGroup = new THREE.Group();
 earthGroup.rotation.z = EARTH_AXIAL_TILT;
-scene.add(earthGroup);
 
 const geo = new THREE.IcosahedronGeometry(1, 12);
 const mat = new THREE.MeshStandardMaterial({ map: loader.load('src/assets/textures/earth-map-5k.jpg') });
@@ -34,7 +34,9 @@ const earthMesh = new THREE.Mesh(geo, mat);
 earthGroup.add(earthMesh);
 
 const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 4);
-scene.add(hemiLight);
+const starField = getStarfield({ numStars: 3000 });
+
+scene.add(earthGroup, hemiLight, starField);
 
 function animate() {
   requestAnimationFrame(animate); 
